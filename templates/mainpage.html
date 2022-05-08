@@ -8,6 +8,7 @@
   <div class="row">
     <div class="col"></div>
         <div class="col-8">
+            <div class="scroll-div">
             <div class="accordion" id="accordionPanelsStayOpenExample">
                 {% for book in page.object_list %}
 
@@ -27,18 +28,20 @@
                       </div>
 
                 {% endfor %}
-                <div class="page-links" align="center">
-                <p>Page number: {{ page.number }}</p>
-                {% if page.has_previous %}
-                    <a href="{% url 'mainpage' %}?page={{ page.previous_page_number }}">Previous page</a>
-                {% endif %}
-                {% if page.has_next %}
-                    <a href="{% url 'mainpage' %}?page={{ page.next_page_number }}">Next page</a>
-                {% endif %}
-                </div>
+
+            </div>
             </div>
         </div>
         <div class="col"></div>
   </div>
 </div>
+    <div class="page-links" align="center">
+                <p>Page number: {{ page.number }}</p>
+                {% if page.has_previous %}
+                    <a class="btn btn-secondary" href="{% url 'mainpage' %}?page={{ page.previous_page_number }}">Previous page</a>
+                {% endif %}
+                {% if page.has_next %}
+                    <a class="btn btn-secondary" href="{% url 'mainpage' %}?page={{ page.next_page_number }}">Next page</a>
+                {% endif %}
+                </div>
 {% endblock %}
