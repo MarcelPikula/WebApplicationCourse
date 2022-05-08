@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>You searched for: {{ searched }}</h1>
+<div class="container">
+  <div class="row">
+    <div class="col"></div>
+        <div class="col-8">
+            <div class="accordion" id="accordionPanelsStayOpenExample">
+                {% for book in books %}
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="panelsStayOpen-collapse">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-{{ book.pk }}" aria-expanded="true" aria-controls="panelsStayOpen-{{  book.pk  }}">
+                            {{ book }}
+                          </button>
+                        </h2>
+                        <div id="panelsStayOpen-{{ book.pk }}" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+                          <div class="accordion-body">
+                              {{ book.description }}
+                              <br>
+                              Ocena: {{ book.rating }}
+                          </div>
+                        </div>
+                      </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+        <div class="col"></div>
+  </div>
+</div>
+
+{% endblock %}
