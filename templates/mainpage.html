@@ -32,16 +32,30 @@
             </div>
             </div>
         </div>
-        <div class="col"></div>
+        <div class="col">
+            Number of books on page:
+            <form action="" method="POST">
+                {% csrf_token %}
+                <input type="number" required name="ele" id="ele" placeholder="Number of books">
+                <input type="submit" value="Submit" class="btn btn-secondary">
+            </form>
+        </div>
   </div>
 </div>
     <div class="page-links" align="center">
                 <p>Page number: {{ page.number }}</p>
                 {% if page.has_previous %}
-                    <a class="btn btn-secondary" href="{% url 'mainpage' %}?page={{ page.previous_page_number }}">Previous page</a>
+                    <a class="btn btn-secondary" href="{% url 'mainpage' %}?page={{ page.previous_page_number }}&number={{ elements }}">Previous page</a>
                 {% endif %}
                 {% if page.has_next %}
-                    <a class="btn btn-secondary" href="{% url 'mainpage' %}?page={{ page.next_page_number }}">Next page</a>
+                    <a class="btn btn-secondary" href="{% url 'mainpage' %}?page={{ page.next_page_number }}&number={{ elements }}">Next page</a>
                 {% endif %}
+            <form action="" method="GET" >
+                <select onchange="this.form.submit()" name="custom_page_number">
+                    {% for num in number_of_pages %}
+                        <option value="{{ num }}">{{ num }}</option>
+                    {% endfor %}
+                </select>
+             </form>
                 </div>
 {% endblock %}

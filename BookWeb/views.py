@@ -1,8 +1,24 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from .models import Book
 from .forms import BookForm
+import csv
+
+
+def export_data(request):
+    response = HttpResponse(content_type='text/csv')
+
+    writer = csv.writer(response)
+    writer.writerow(['Title', 'Author', 'Description', 'Rating'])
+
+    for book in Book.objects.all().values_list('title', 'author', 'description', 'rating'):
+        writer.writerow(book)
+
+    response['Content-Disposition'] = 'attachment; filename = "pomiary.csv"'
+
+    return response
 
 
 def add_book(request):
@@ -31,8 +47,16 @@ def search_view(request):
 
 def user_view(request):
     all_books = Book.objects.all()
+    num_of_elements = request.GET.get('number') if request.GET.get('number') else 4
+    if request.method == "POST":
+        if int(request.POST['ele']) >= 0:
+            num_of_elements = request.POST['ele']
+        else:
+            num_of_elements = 1
 
-    books_paginator = Paginator(all_books, 4)
+    books_paginator = Paginator(all_books, num_of_elements)
+
+    number_of_pages = [i+1 for i in range(books_paginator.num_pages)]
 
     page_num = request.GET.get('page')
 
@@ -44,6 +68,8 @@ def user_view(request):
         'Books': all_books,
         'page': page,
         'book_handler': book_handler,
+        'elements': num_of_elements,
+        'number_of_pages': number_of_pages,
     }
 
     return render(request, 'mainpage.html', context)
