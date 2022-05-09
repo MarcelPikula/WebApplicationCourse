@@ -3,7 +3,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from .models import Book
-from .forms import BookForm
+from .forms import BookForm, ReviewForm
 import csv
 
 
@@ -33,6 +33,20 @@ def add_book(request):
         if 'submitted' in request.GET:
             submitted = True
     return render(request, 'add_book.html', {'form': form, 'submitted': submitted})
+
+
+def add_review(request):
+    submitted = False
+    if request.method == "POST":
+        form = BookForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('?submitted=True')
+    else:
+        form = ReviewForm
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, 'add_review.html', {'form': form, 'submitted': submitted})
 
 
 def search_view(request):
