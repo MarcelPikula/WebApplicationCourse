@@ -56,20 +56,14 @@ def user_view(request):
 
     books_paginator = Paginator(all_books, num_of_elements)
 
-    number_of_pages = [i+1 for i in range(books_paginator.num_pages)]
-
     page_num = request.GET.get('page')
 
     page = books_paginator.get_page(page_num)
 
-    book_handler = []
-
     context = {
         'Books': all_books,
         'page': page,
-        'book_handler': book_handler,
         'elements': num_of_elements,
-        'number_of_pages': number_of_pages,
-    }
+     }
 
     return render(request, 'mainpage.html', context)

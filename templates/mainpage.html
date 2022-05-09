@@ -1,35 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-
-
 <div class="container">
   <div class="row">
     <div class="col"></div>
         <div class="col-8">
             <div class="scroll-div">
-            <div class="accordion" id="accordionPanelsStayOpenExample">
-                {% for book in page.object_list %}
+                <div class="accordion" id="accordionPanelsStayOpenExample">
+                    {% for book in page.object_list %}
 
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="panelsStayOpen-collapse">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-{{ book.pk }}" aria-expanded="true" aria-controls="panelsStayOpen-{{  book.pk  }}">
-                            {{ book }}
-                          </button>
-                        </h2>
-                        <div id="panelsStayOpen-{{ book.pk }}" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
-                          <div class="accordion-body">
-                              {{ book.description }}
-                              <br>
-                              Ocena: {{ book.rating }}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="panelsStayOpen-collapse">
+                              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-{{ book.pk }}" aria-expanded="true" aria-controls="panelsStayOpen-{{  book.pk  }}">
+                                {{ book }}
+                              </button>
+                            </h2>
+                            <div id="panelsStayOpen-{{ book.pk }}" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+                              <div class="accordion-body">
+                                  {{ book.description }}
+                                  <br>
+                                  Ocena: {{ book.rating }}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
 
-                {% endfor %}
-
-            </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
         <div class="col">
@@ -42,20 +38,24 @@
         </div>
   </div>
 </div>
-    <div class="page-links" align="center">
-                <p>Page number: {{ page.number }}</p>
-                {% if page.has_previous %}
-                    <a class="btn btn-secondary" href="{% url 'mainpage' %}?page={{ page.previous_page_number }}&number={{ elements }}">Previous page</a>
-                {% endif %}
-                {% if page.has_next %}
-                    <a class="btn btn-secondary" href="{% url 'mainpage' %}?page={{ page.next_page_number }}&number={{ elements }}">Next page</a>
-                {% endif %}
-            <form action="" method="GET" >
-                <select onchange="this.form.submit()" name="custom_page_number">
-                    {% for num in number_of_pages %}
-                        <option value="{{ num }}">{{ num }}</option>
-                    {% endfor %}
-                </select>
-             </form>
-                </div>
+<div class="page-links" align="center">
+    <p>Page number: {{ page.number }}</p>
+    {% if page.has_previous %}
+        <a class="btn btn-secondary" href="{% url 'mainpage' %}?page={{ page.previous_page_number }}&number={{ elements }}">Previous page</a>
+    {% else %}
+        <a class="btn btn-secondary disabled" disabled="true" aria-disabled="true" href="#">Previous page</a>
+    {% endif %}
+    {% for pg in page.paginator.page_range %}
+        {% if page.number == pg %}
+            <a href="?page={{pg}}&number={{ elements }}"  class="btn btn-default"><u>{{pg}}</u></a>
+        {% else %}
+            <a href="?page={{pg}}&number={{ elements }}" class="btn btn-default">{{pg}}</a>
+        {% endif %}
+    {% endfor %}
+    {% if page.has_next %}
+        <a class="btn btn-secondary"  href="{% url 'mainpage' %}?page={{ page.next_page_number }}&number={{ elements }}">Next page</a>
+        {% else %}
+        <a class="btn btn-secondary disabled" aria-disabled="true" >Next page</a>
+    {% endif %}
+</div>
 {% endblock %}
