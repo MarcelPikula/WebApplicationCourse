@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
-from .models import Book
-from .forms import BookForm, ReviewForm
+from .models import Book, Review, User
+from .forms import BookForm, ReviewForm, UserForm
 import csv
 
 
@@ -38,7 +38,7 @@ def add_book(request):
 def add_review(request):
     submitted = False
     if request.method == "POST":
-        form = BookForm(request.POST)
+        form = ReviewForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('?submitted=True')
@@ -49,18 +49,34 @@ def add_review(request):
     return render(request, 'add_review.html', {'form': form, 'submitted': submitted})
 
 
+def add_user(request):
+    submitted = False
+    if request.method == "POST":
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('?submitted=True')
+    else:
+        form = UserForm
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, 'add_user.html', {'form': form, 'submitted': submitted})
+
+
 def search_view(request):
-    books = []
+    all_reviews = Review.objects.all()
     if request.method == "POST":
         searched = request.POST['searched']
         books = Book.objects.filter(title__contains=searched)
-        return render(request, 'search_results.html', {'searched': searched, 'books': books})
+        return render(request, 'search_results.html', {'searched': searched, 'books': books, 'Reviews': all_reviews})
     else:
         return render(request, 'search_results.html')
 
 
 def user_view(request):
     all_books = Book.objects.all()
+    all_reviews = Review.objects.all()
+    all_users = User.objects.all()
     num_of_elements = request.GET.get('number') if request.GET.get('number') else 4
     if request.method == "POST":
         if int(request.POST['ele']) >= 0:
@@ -76,8 +92,29 @@ def user_view(request):
 
     context = {
         'Books': all_books,
+        'Reviews': all_reviews,
+        'Users': all_users,
         'page': page,
         'elements': num_of_elements,
      }
 
     return render(request, 'mainpage.html', context)
+
+
+def show_users(request):
+    all_users = User.objects.all()
+    return render(request, 'show_users.html', {'Users': all_users})
+
+
+def show_stats(request):
+    all_books = Book.objects.all()
+    all_users = User.objects.all()
+    all_reviews = Review.objects.all()
+
+    context = {
+        'num_of_books': len(all_books),
+        'num_of_users': len(all_users),
+        'num_of_reviews': len(all_reviews),
+    }
+
+    return render(request, 'show_stats.html', context)

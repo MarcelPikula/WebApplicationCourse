@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Book, Review
+from .models import Book, Review, User
 
 
 class BookForm(ModelForm):
@@ -24,17 +24,34 @@ class BookForm(ModelForm):
 
 
 class ReviewForm(ModelForm):
+
     class Meta:
+        all_users = User.objects.all()
         model = Review
         fields = "__all__"
 
         labels = {
             'text_review': '',
             'score': '',
-            'book': '',
         }
 
         widgets = {
             'text_review': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Review'}),
             'score': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+        labels = {
+            'username': '',
+            'email': '',
+        }
+
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'e-mail'}),
         }

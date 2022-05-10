@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <center>
+    <h1>Add new user to the BookWeb</h1>
+        {% if submitted %}
+            New user is saved succesfully!
+        {% else %}
+
+            <div class="container">
+              <div class="row">
+                <div class="col-sm"></div>
+                <div class="col-sm-10">
+                    <form action="" method=POST>
+                        {% csrf_token %}
+
+                        {{ form.as_p }}
+
+                        <input type="submit" value="Submit" class="btn btn-secondary">
+                    </form>
+                </div>
+                <div class="col-sm"></div>
+              </div>
+            </div>
+
+
+
+        {% endif %}
+    </center>
+{% endblock %}

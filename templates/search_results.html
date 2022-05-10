@@ -22,9 +22,30 @@
                             </h2>
                             <div id="panelsStayOpen-{{ book.pk }}" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
                               <div class="accordion-body">
-                                  {{ book.description }}
-                                  <br>
-                                  Ocena: {{ book.rating }}
+                                  <div class="row">
+                                  <div class="col-8" style="text-align:justify">
+                                      {{ book.description }}
+                                      <br>
+                                      Ocena: {{ book.rating }}
+                                      <br>
+                                  </div>
+                                  <div class="col-4">
+                                  Recenzje książki:
+                                    {% for review in Reviews %}
+                                            {% if review.book  == book%}
+                                                <div class="card">
+                                                    <div class="card-body" style="text-align: justify">
+                                                        <b>{{ review.user }} napisał/a:</b>
+                                                        <br>
+                                                        {{ review.text_review }}
+                                                        <br>
+                                                        <b>Ocena: {{ review.score }}</b>
+                                                    </div>
+                                                 </div>
+                                            {% endif %}
+                                    {% endfor %}
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>

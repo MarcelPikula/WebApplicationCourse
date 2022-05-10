@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Book, LibraryInfo
+from .models import Book, Review, User
 
 
 @admin.register(Book)
@@ -9,4 +9,5 @@ class BookAdmin(admin.ModelAdmin):
     search_fields = ("title", "author")
 
 
-admin.site.register(LibraryInfo)
+admin.site.register(Review)
+admin.site.register(User)
