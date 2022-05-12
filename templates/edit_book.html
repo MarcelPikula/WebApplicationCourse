@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <center>
+    {% if user.is_authenticated %}
+    <h1>Edit book</h1>
+        {{ book }}
+    </center>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+            </div>
+                <div class="col-8">
+                    <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Update" class="btn btn-secondary">
+                    </form>
+                </div>
+              <div class="col"></div>
+          </div>
+    </div>
+    {% else %}
+        <h1>You must login to edit book!</h1>
+        <a href="{% url 'login' %}">Login here</a>
+    {% endif %}
+
+{% endblock %}

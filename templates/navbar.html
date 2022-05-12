@@ -13,9 +13,6 @@
           <a class="nav-link" href="{% url 'add_review' %}">Add Review</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'add_user' %}">Add User</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" href="{% url 'show_users' %}">Show All Users</a>
         </li>
         <li class="nav-item">
@@ -24,6 +21,19 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'export_data' %}">Export data</a>
         </li>
+          {% if user.is_authenticated %}
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+          {% endif %}
+
       </ul>
       <form class="d-flex" method="POST" action="{% url 'search_results' %}">
           {% csrf_token %}

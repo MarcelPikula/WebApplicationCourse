@@ -3,29 +3,31 @@
 
 {% block content %}
     <center>
-    <h1>Add new book to the BookWeb</h1>
-        {% if submitted %}
-            Your book is saved succesfully!
-        {% else %}
+    {% if user.is_authenticated %}
+        <h1>Add new book to the BookWeb</h1>
+            {% if submitted %}
+                Your book is saved succesfully!
+            {% else %}
 
-            <div class="container">
-              <div class="row">
-                <div class="col-sm"></div>
-                <div class="col-sm-10">
-                    <form action="" method=POST>
-                        {% csrf_token %}
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm"></div>
+                    <div class="col-sm-10">
+                        <form action="" method=POST>
+                            {% csrf_token %}
 
-                        {{ form.as_p }}
+                            {{ form.as_p }}
 
-                        <input type="submit" value="Submit" class="btn btn-secondary">
-                    </form>
+                            <input type="submit" value="Submit" class="btn btn-secondary">
+                        </form>
+                    </div>
+                    <div class="col-sm"></div>
+                  </div>
                 </div>
-                <div class="col-sm"></div>
-              </div>
-            </div>
-
-
-
-        {% endif %}
+            {% endif %}
+    {% else %}
+        <h1>You must login to add new book!</h1>
+        <a href="{% url 'login' %}">Login here</a>
+    {% endif %}
     </center>
 {% endblock %}

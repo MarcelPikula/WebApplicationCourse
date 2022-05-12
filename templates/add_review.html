@@ -3,7 +3,10 @@
 
 {% block content %}
     <center>
+    {% if user.is_authenticated %}
     <h1>Add new review to the BookWeb</h1>
+    </center>
+
         {% if submitted %}
             Your review is saved succesfully!
         {% else %}
@@ -23,9 +26,10 @@
                 <div class="col-sm"></div>
               </div>
             </div>
-
-
-
         {% endif %}
-    </center>
+    {% else %}
+        <h1>You must login to add new review!</h1>
+        <a href="{% url 'login' %}">Login here</a>
+    {% endif %}
+
 {% endblock %}

@@ -19,10 +19,13 @@
                               <div class="accordion-body">
                               <div class="row">
                                   <div class="col-8" style="text-align:justify">
+
                                       {{ book.description }}
                                       <br>
+
                                       Ocena: {{ book.rating }}
                                       <br>
+                                        <a class="btn btn-outline-secondary" role="button" href="{% url 'edit_book' book.id %}">Edit</a>
                                   </div>
                                   <div class="col-4">
                                   Recenzje książki:
@@ -35,6 +38,10 @@
                                                         {{ review.text_review }}
                                                         <br>
                                                         <b>Ocena: {{ review.score }}</b>
+                                                        <div style="horiz-align: right;">
+                                                            <a  class="btn btn-outline-secondary" role="button" href="{% url 'edit_review' review.id %}">Edit</a>
+                                                        </div>
+
                                                     </div>
                                                  </div>
                                             {% endif %}

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
 
 class Book(models.Model):
@@ -24,6 +25,9 @@ class Review(models.Model):
     score = models.PositiveSmallIntegerField(default=3)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "Review of: {}".format(self.book)
 
 
 

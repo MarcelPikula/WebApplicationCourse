@@ -1,10 +1,29 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
+from django.contrib.auth import get_user_model
 from .models import Book, Review, User
-from .forms import BookForm, ReviewForm, UserForm
+from .forms import BookForm, ReviewForm
 import csv
+
+
+def edit_book(request, book_id):
+    book = Book.objects.get(pk=book_id)
+    form = BookForm(request.POST or None, instance=book)
+    if form.is_valid():
+        form.save()
+        return redirect('mainpage')
+    return render(request, 'edit_book.html', {'book': book, 'form': form})
+
+
+def edit_review(request, review_id):
+    review = Review.objects.get(pk=review_id)
+    form = ReviewForm(request.POST or None, instance=review)
+    if form.is_valid():
+        form.save()
+        return redirect('mainpage')
+    return render(request, 'edit_review.html', {'review': review, 'form': form})
 
 
 def export_data(request):
@@ -49,20 +68,6 @@ def add_review(request):
     return render(request, 'add_review.html', {'form': form, 'submitted': submitted})
 
 
-def add_user(request):
-    submitted = False
-    if request.method == "POST":
-        form = UserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('?submitted=True')
-    else:
-        form = UserForm
-        if 'submitted' in request.GET:
-            submitted = True
-    return render(request, 'add_user.html', {'form': form, 'submitted': submitted})
-
-
 def search_view(request):
     all_reviews = Review.objects.all()
     if request.method == "POST":
@@ -74,9 +79,10 @@ def search_view(request):
 
 
 def user_view(request):
+    user_db = get_user_model()
     all_books = Book.objects.all()
     all_reviews = Review.objects.all()
-    all_users = User.objects.all()
+    all_users = user_db.objects.all()
     num_of_elements = request.GET.get('number') if request.GET.get('number') else 4
     if request.method == "POST":
         if int(request.POST['ele']) >= 0:
@@ -102,13 +108,15 @@ def user_view(request):
 
 
 def show_users(request):
-    all_users = User.objects.all()
+    user_db = get_user_model()
+    all_users = user_db.objects.all()
     return render(request, 'show_users.html', {'Users': all_users})
 
 
 def show_stats(request):
+    user_db = get_user_model()
     all_books = Book.objects.all()
-    all_users = User.objects.all()
+    all_users = user_db.objects.all()
     all_reviews = Review.objects.all()
 
     context = {
